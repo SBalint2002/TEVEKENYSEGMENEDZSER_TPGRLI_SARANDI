@@ -21,7 +21,6 @@
             <select class="form-control custom-select" id="activity-type"></select>
             <button id="add-btn" class="btn btn-secondary" type="button">Add</button>
         </div>
-        <div id="error-message" class="text-danger mt-2"></div>
     </div>
 
     <hr>
@@ -48,6 +47,12 @@
 
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <span class="toast-body"></span>
         </div>
     </div>
 

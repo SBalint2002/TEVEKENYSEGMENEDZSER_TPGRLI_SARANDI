@@ -20,3 +20,12 @@ export function getColorByType(type) {
             return "bg-secondary";
     }
 }
+
+export function showToast(msg, color) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add("show", color, "text-light", "p-3", "rounded");
+    setTimeout(() => {
+        toast.classList.remove("show", color, "text-light", "p-3", "rounded");
+    }, 5000);
+}
