@@ -11,7 +11,3 @@ const ActivityType = Object.freeze({
 })
 
 export default ActivityType;
-
-export function isValidActivityType(type) {
-    return Object.values(ActivityType).includes(type);
-}

@@ -15,6 +15,10 @@ function addActivity() {
     const typeSelect = document.getElementById('activity-type');
     const typeValue = typeSelect.options[typeSelect.selectedIndex].value;
 
+    if (!isInputValid(name, days, hours, typeValue)) {
+        return;
+    }
+
     const activity = new ActivityDto(name, days, hours, typeValue);
     activities.push(activity);
 
@@ -22,7 +26,34 @@ function addActivity() {
     clearInputFields();
 }
 
-function createTableRow (activity) {
+function isInputValid(name, days, hours, typeValue) {
+    const errorField = document.getElementById('error-message');
+
+    if (!name || name === '') {
+        errorField.innerText = 'Name cannot be empty';
+        return false;
+    }
+
+    if (days < 1 || days > 7) {
+        errorField.innerText = 'Days must be between 1 and 7';
+        return false;
+    }
+
+    if (hours < 1 || hours > 24) {
+        errorField.innerText = 'Hours must be between 1 and 24';
+        return false;
+    }
+
+    if (!Object.values(ActivityType).includes(typeValue)) {
+        errorField.innerText = 'Invalid type';
+        return false;
+    }
+
+    errorField.innerText = '';
+    return true;
+}
+
+function createTableRow(activity) {
     const row = document.createElement('tr');
 
     const nameCell = document.createElement('td');
@@ -38,7 +69,7 @@ function createTableRow (activity) {
     row.appendChild(hoursCell);
 
     const typeCell = document.createElement('td');
-    typeCell.textContent = activity.type.value;
+    typeCell.textContent = activity.type;
     row.appendChild(typeCell);
 
     document.getElementById('activity-rows').appendChild(row);
@@ -63,6 +94,5 @@ function populateDropdown() {
 
     select.value = ActivityType.OTHER;
 }
-
 
 export {addActivity, populateDropdown};
