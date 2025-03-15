@@ -1,7 +1,6 @@
 class ActivityDto {
-    constructor(name, days, hours, type) {
+    constructor(name, hours, type) {
         this.name = name;
-        this.days = days;
         this.hours = hours;
         this.type = type;
     }

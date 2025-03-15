@@ -1,5 +1,6 @@
 import ActivityDto from "../models/ActivityDto.js";
 import ActivityType from "../models/ActivityType.js";
+import {getColorByType} from "./ui.js";
 
 let activities = [];
 
@@ -10,32 +11,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function addActivity() {
     const name = document.getElementById('activity-name').value;
-    const days = Number(document.getElementById('activity-days').value);
     const hours = Number(document.getElementById('activity-hours').value);
     const typeSelect = document.getElementById('activity-type');
     const typeValue = typeSelect.options[typeSelect.selectedIndex].value;
 
-    if (!isInputValid(name, days, hours, typeValue)) {
+    if (!isInputValid(name, hours, typeValue)) {
         return;
     }
 
-    const activity = new ActivityDto(name, days, hours, typeValue);
-    activities.push(activity);
+    const activity = new ActivityDto(name, hours, typeValue);
 
     createTableRow(activity);
     clearInputFields();
 }
 
-function isInputValid(name, days, hours, typeValue) {
+function isInputValid(name, hours, typeValue) {
     const errorField = document.getElementById('error-message');
 
     if (!name || name === '') {
         errorField.innerText = 'Name cannot be empty';
-        return false;
-    }
-
-    if (days < 1 || days > 7) {
-        errorField.innerText = 'Days must be between 1 and 7';
         return false;
     }
 
@@ -55,29 +49,39 @@ function isInputValid(name, days, hours, typeValue) {
 
 function createTableRow(activity) {
     const row = document.createElement('tr');
-
     const nameCell = document.createElement('td');
-    nameCell.textContent = activity.name;
-    row.appendChild(nameCell);
-
-    const daysCell = document.createElement('td');
-    daysCell.textContent = activity.days;
-    row.appendChild(daysCell);
-
     const hoursCell = document.createElement('td');
-    hoursCell.textContent = activity.hours;
-    row.appendChild(hoursCell);
-
     const typeCell = document.createElement('td');
-    typeCell.textContent = activity.type;
+    const actionCell = document.createElement('td');
+    const typeBadge = document.createElement('span');
+    const deleteButton = document.createElement('button');
+
+    nameCell.textContent = activity.name;
+    hoursCell.textContent = activity.hours;
+    typeBadge.textContent = activity.type;
+    let color = getColorByType(activity.type);
+    typeBadge.classList.add('badge', color);
+    typeCell.appendChild(typeBadge);
+
+    deleteButton.classList.add('btn-close');
+    deleteButton.addEventListener('click', () => deleteActivity(activity, row));
+    actionCell.appendChild(deleteButton);
+
+    row.appendChild(nameCell);
+    row.appendChild(hoursCell);
     row.appendChild(typeCell);
+    row.appendChild(actionCell);
 
     document.getElementById('activity-rows').appendChild(row);
 }
 
+function deleteActivity(activity, row) {
+    activities = activities.filter(a => a !== activity);
+    row.remove();
+}
+
 function clearInputFields() {
     document.getElementById('activity-name').value = '';
-    document.getElementById('activity-days').value = '';
     document.getElementById('activity-hours').value = '';
     document.getElementById('activity-type').value = ActivityType.OTHER;
 }
