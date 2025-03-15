@@ -1,6 +1,6 @@
 import ActivityType from "../models/ActivityType.js";
-import {showToast} from "./ui.js";
-import {createTableRow} from "./main.js";
+import {showToast} from "./uiUtils.js";
+import {createTableRow} from "../js/indexPage.js";
 
 export function isInputValid(name, hours, typeValue) {
     if (!name || name === '') {
@@ -30,7 +30,7 @@ export function clearInputFields() {
 export function populateDropdown() {
     const select = document.getElementById("activity-type");
 
-    Object.entries(ActivityType).forEach(([key, value]) => {
+    Object.entries(ActivityType).forEach(([_, value]) => {
         const option = document.createElement('option');
         option.value = value;
         option.text = value;

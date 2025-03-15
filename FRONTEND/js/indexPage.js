@@ -1,6 +1,6 @@
 import ActivityDto from "../models/ActivityDto.js";
-import {getColorByType, showToast} from "./ui.js";
-import {isInputValid, clearInputFields, populateDropdown, loadSavedActivities, getDays} from "./utils.js";
+import {getColorByType, showToast} from "../utils/uiUtils.js";
+import {isInputValid, clearInputFields, populateDropdown, loadSavedActivities, getDays} from "../utils/generalUtils.js";
 
 let activities = [];
 

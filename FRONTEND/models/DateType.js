@@ -1,4 +1,4 @@
-const DateEnum = Object.freeze({
+export const DateType = Object.freeze({
     MONDAY: "Monday",
     TUESDAY: "Tuesday",
     WEDNESDAY: "Wednesday",
@@ -7,5 +7,3 @@ const DateEnum = Object.freeze({
     SATURDAY: "Saturday",
     SUNDAY: "Sunday"
 })
-
-export default DateEnum;

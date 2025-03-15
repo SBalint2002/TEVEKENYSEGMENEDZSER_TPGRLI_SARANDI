@@ -1,4 +1,5 @@
-import {showToast} from "./ui.js";
+import {showToast} from "../utils/uiUtils.js";
+import {getHelloWorld} from "../services/calendarService.js";
 
 let activities = [];
 
