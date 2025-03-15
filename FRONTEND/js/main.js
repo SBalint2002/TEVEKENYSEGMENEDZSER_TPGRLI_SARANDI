@@ -23,6 +23,7 @@ function addActivity() {
     }
 
     const activity = new ActivityDto(name, hours, typeValue);
+    activities.push(activity);
 
     createTableRow(activity);
     clearInputFields();
@@ -76,5 +77,6 @@ export function createTableRow(activity) {
 
 function deleteActivity(activity, row) {
     activities = activities.filter(a => a !== activity);
+    sessionStorage.setItem('activities', JSON.stringify(activities));
     row.remove();
 }

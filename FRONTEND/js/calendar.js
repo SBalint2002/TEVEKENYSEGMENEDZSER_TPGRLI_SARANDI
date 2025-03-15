@@ -1,4 +1,20 @@
+import {showToast} from "./ui.js";
+
+let activities = [];
+
 document.addEventListener('DOMContentLoaded', async () => {
+    activities = JSON.parse(sessionStorage.getItem('activities')) || [];
+
+    if (activities.length < 1) {
+        showToast('No activites found', 'bg-danger');
+        setTimeout(() => {
+            window.open('../index.html', '_self');
+        }, 3000);
+        return;
+    }
+
+    showToast('Calendar page loaded', 'bg-success');
+
     await uploadTimeColumn();
 });
 

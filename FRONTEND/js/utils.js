@@ -40,7 +40,7 @@ export function populateDropdown() {
     select.value = ActivityType.OTHER;
 }
 
-export function loadSavedActivities() {
+export async function loadSavedActivities() {
     const activities = JSON.parse(sessionStorage.getItem('activities')) || [];
     activities.forEach(activity => createTableRow(activity));
     return activities;
