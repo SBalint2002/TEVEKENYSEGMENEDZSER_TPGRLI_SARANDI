@@ -45,3 +45,7 @@ export function loadSavedActivities() {
     activities.forEach(activity => createTableRow(activity));
     return activities;
 }
+
+export function getDays() {
+    return Number(sessionStorage.getItem('days'));
+}

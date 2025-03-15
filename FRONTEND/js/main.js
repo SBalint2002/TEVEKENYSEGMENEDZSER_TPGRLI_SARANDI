@@ -1,12 +1,13 @@
 import ActivityDto from "../models/ActivityDto.js";
-import {getColorByType} from "./ui.js";
-import {isInputValid, clearInputFields, populateDropdown, loadSavedActivities} from "./utils.js";
+import {getColorByType, showToast} from "./ui.js";
+import {isInputValid, clearInputFields, populateDropdown, loadSavedActivities, getDays} from "./utils.js";
 
 let activities = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
     await populateDropdown();
     activities = await loadSavedActivities(createTableRow);
+    document.getElementById('activity-days').value = getDays() || 1;
     document.getElementById('add-btn').addEventListener('click', addActivity);
     document.getElementById('create-table').addEventListener('click', createTable);
 });
@@ -28,6 +29,19 @@ function addActivity() {
 }
 
 function createTable() {
+    const days = Number(document.getElementById('activity-days').value);
+
+    if (days < 1 || days > 14) {
+        showToast('Days must be between 1 and 14', 'bg-danger');
+        return;
+    }
+
+    if (activities.length === 0) {
+        showToast('Add activities first', 'bg-danger');
+        return;
+    }
+
+    sessionStorage.setItem('days', days);
     sessionStorage.setItem('activities', JSON.stringify(activities));
     window.open('pages/calendarPage.html', '_self')
 }
