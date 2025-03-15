@@ -1,12 +1,14 @@
 import ActivityDto from "../models/ActivityDto.js";
-import ActivityType from "../models/ActivityType.js";
 import {getColorByType} from "./ui.js";
+import {isInputValid, clearInputFields, populateDropdown, loadSavedActivities} from "./utils.js";
 
 let activities = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
     await populateDropdown();
+    activities = await loadSavedActivities(createTableRow);
     document.getElementById('add-btn').addEventListener('click', addActivity);
+    document.getElementById('create-table').addEventListener('click', createTable);
 });
 
 function addActivity() {
@@ -25,29 +27,12 @@ function addActivity() {
     clearInputFields();
 }
 
-function isInputValid(name, hours, typeValue) {
-    const errorField = document.getElementById('error-message');
-
-    if (!name || name === '') {
-        errorField.innerText = 'Name cannot be empty';
-        return false;
-    }
-
-    if (hours < 1 || hours > 24) {
-        errorField.innerText = 'Hours must be between 1 and 24';
-        return false;
-    }
-
-    if (!Object.values(ActivityType).includes(typeValue)) {
-        errorField.innerText = 'Invalid type';
-        return false;
-    }
-
-    errorField.innerText = '';
-    return true;
+function createTable() {
+    sessionStorage.setItem('activities', JSON.stringify(activities));
+    window.open('pages/calendarPage.html', '_self')
 }
 
-function createTableRow(activity) {
+export function createTableRow(activity) {
     const row = document.createElement('tr');
     const nameCell = document.createElement('td');
     const hoursCell = document.createElement('td');
@@ -79,24 +64,3 @@ function deleteActivity(activity, row) {
     activities = activities.filter(a => a !== activity);
     row.remove();
 }
-
-function clearInputFields() {
-    document.getElementById('activity-name').value = '';
-    document.getElementById('activity-hours').value = '';
-    document.getElementById('activity-type').value = ActivityType.OTHER;
-}
-
-function populateDropdown() {
-    const select = document.getElementById("activity-type");
-
-    Object.entries(ActivityType).forEach(([key, value]) => {
-        const option = document.createElement('option');
-        option.value = value;
-        option.text = value;
-        select.appendChild(option);
-    });
-
-    select.value = ActivityType.OTHER;
-}
-
-export {addActivity, populateDropdown};
