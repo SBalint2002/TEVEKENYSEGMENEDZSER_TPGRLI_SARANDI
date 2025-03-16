@@ -1,6 +1,7 @@
 import {showToast, showToastWithRedirect} from "../utils/uiUtils.js";
 import {createSchedule} from "../services/calendarService.js";
-import ActivityDto from "../models/activityDto.js";
+import ActivityDto from "../models/dto/ActivityDto.js";
+import ScheduleResponseDto from "../models/dto/ScheduleResponseDto.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const activities = JSON.parse(sessionStorage.getItem('activities')) || [];
@@ -11,10 +12,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const schedule = (await handleCreateSchedule(activities, days)).message;
-
-    generateTable(schedule, days);
-    uploadTimeColumn();
+    const schedule = await handleCreateSchedule(activities, days);
+    generateTable(schedule.activities, schedule.day);
 });
 
 async function handleCreateSchedule(activities, days) {
@@ -23,7 +22,8 @@ async function handleCreateSchedule(activities, days) {
     if (!scheduleResponse.success) {
         showToastWithRedirect(scheduleResponse.message, 'bg-danger', '../index.html');
     }
-    return scheduleResponse;
+    const schedule = scheduleResponse.message;
+    return new ScheduleResponseDto(schedule.day, schedule.activities);
 }
 
 function uploadTimeColumn(tableBody) {
@@ -51,20 +51,37 @@ function uploadHeaderRow(tableHeader, days) {
     }
 }
 
-function generateTable(schedule, days) {
+function generateTable(activities, days) {
     const tableHeader = document.getElementById('table-header');
     const tableBody = document.getElementById('table-body');
-    const rows = tableBody.getElementsByTagName('tr');
+
+    tableHeader.innerHTML = '';
+    tableBody.innerHTML = '';
 
     uploadHeaderRow(tableHeader, days);
     uploadTimeColumn(tableBody);
 
-    for (let i = 0; i < days; i++) {
-        for (let j = 0; j < rows.length; j++) {
-            const cell = document.createElement('td');
-            cell.textContent = j;
-            cell.classList.add('col');
-            rows[j].appendChild(cell);
+    activities.sort((a, b) => (a.day === b.day ? a.startTime - b.startTime : a.day - b.day));
+    console.log(activities);
+
+    for (let i = 1; i <= days; i++) {
+        for (let hour = 0; hour < 24; hour++) {
+            const row = tableBody.rows[hour];
+
+            const activity = activities.find(a => a.day === i && a.startTime === hour);
+            if (activity) {
+                const cell = document.createElement('td');
+                const activityLength = activity.endTime - activity.startTime;
+                cell.textContent = activity.name;
+                cell.rowSpan = activityLength;
+                cell.classList.add('col');
+                row.appendChild(cell);
+                hour += activityLength - 1;
+            } else {
+                const cell = document.createElement('td');
+                cell.classList.add('col');
+                row.appendChild(cell);
+            }
         }
     }
 

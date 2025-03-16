@@ -1,7 +1,7 @@
 using BACKEND.Models;
 using System;
 
-namespace BACKEND.DTOs
+namespace BACKEND.Models.DTOs
 {
     public class ActivityDto
     {

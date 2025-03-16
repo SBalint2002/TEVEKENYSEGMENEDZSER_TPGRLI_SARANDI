@@ -1,5 +1,5 @@
-﻿using BACKEND.DTOs;
-using BACKEND.Models;
+﻿using BACKEND.Models;
+using BACKEND.Models.DTOs;
 using System;
 
 namespace BACKEND.Services
