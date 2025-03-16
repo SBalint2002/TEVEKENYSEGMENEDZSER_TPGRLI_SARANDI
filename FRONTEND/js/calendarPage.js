@@ -1,4 +1,4 @@
-import {showToast} from "../utils/uiUtils.js";
+import {showToastWithRedirect} from "../utils/uiUtils.js";
 import {createSchedule} from "../services/calendarService.js";
 import ActivityDto from "../models/activityDto.js";
 
@@ -7,10 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const days = Number(sessionStorage.getItem('days'));
 
     if (activities.length < 1 || days < 1 || days > 14) {
-        showToast('Error in creating table (missing information)', 'bg-danger');
-        setTimeout(() => {
-            window.open('../index.html', '_self');
-        }, 3000);
+        showToastWithRedirect('Error in creating table (missing information)', 'bg-danger', '../index.html');
         return;
     }
 
@@ -19,25 +16,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log(schedule);
 
     await uploadTimeColumn();
-    showToast('Calendar page loaded', 'bg-success');
+    //showToast('Calendar page loaded', 'bg-success');
 });
 
 async function handleCreateSchedule(activities, days) {
-    try {
-        const activityDto = new ActivityDto(activities, days);
-
-        const schedule = await createSchedule(activityDto);
-
-        if (!schedule) {
-            throw new Error('No schedule returned');
-        }
-        return schedule;
-    } catch (error) {
-        showToast(error.message, 'bg-danger');
-        setTimeout(() => {
-            window.open('../index.html', '_self');
-        }, 3000);
+    const activityDto = new ActivityDto(activities, days);
+    const scheduleResponse = await createSchedule(activityDto);
+    if (!scheduleResponse.success) {
+        showToastWithRedirect(scheduleResponse.message, 'bg-danger', '../index.html');
     }
+    return scheduleResponse;
 }
 
 function uploadTimeColumn() {

@@ -19,13 +19,20 @@ namespace BACKEND.Controllers
         [HttpPost]
         public IActionResult GenerateSchedule([FromBody] ActivityDto activityDto)
         {
-            if (activityDto == null)
+            try
             {
-                return BadRequest("Activities can't be null");
-            }
+                if (activityDto == null)
+                {
+                    return BadRequest("Activities can't be null");
+                }
 
-            var schedule = scheduleService.GenerateSchedule(activityDto);
-            return Ok(schedule);
+                var schedule = scheduleService.GenerateSchedule(activityDto);
+                return Ok(schedule);
+            }
+            catch (InvalidDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

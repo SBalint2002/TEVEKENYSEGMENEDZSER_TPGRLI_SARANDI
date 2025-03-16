@@ -13,7 +13,7 @@ export function getColorByType(type) {
         case "Relax":
             return "bg-info";
         case "Eat":
-            return "bg-light";
+            return "bg-primary";
         case "Sleep":
             return "bg-dark";
         default:
@@ -27,5 +27,15 @@ export function showToast(msg, color) {
     toast.classList.add("show", color, "text-light", "p-3", "rounded");
     setTimeout(() => {
         toast.classList.remove("show", color, "text-light", "p-3", "rounded");
+    }, 5000);
+}
+
+export function showToastWithRedirect(msg, color, target) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add("show", color, "text-light", "p-3", "rounded");
+    setTimeout(() => {
+        toast.classList.remove("show", color, "text-light", "p-3", "rounded");
+        window.open(target, '_self');
     }, 5000);
 }

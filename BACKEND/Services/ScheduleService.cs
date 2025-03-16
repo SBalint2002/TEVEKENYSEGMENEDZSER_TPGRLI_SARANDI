@@ -13,9 +13,6 @@ namespace BACKEND.Services
 
             activities = activities.OrderByDescending(a => a.hours).ToList();
 
-            int maxDailHours = 16;
-            int restTime = 1;
-
             List<List<ScheduledActivity>> schedule = new List<List<ScheduledActivity>>();
             for (int i = 0; i < days; i++)
             {
@@ -27,6 +24,11 @@ namespace BACKEND.Services
             foreach (var activity in activities)
             {
                 int bestDay = Array.IndexOf(dailyHours, dailyHours.Min());
+
+                if (16 - dailyHours[bestDay] < activity.hours)
+                {
+                    throw new InvalidDataException("Too much activity for given days");
+                }
 
                 int startTime = dailyHours[bestDay] + 8;
                 int endTime = startTime + activity.hours;

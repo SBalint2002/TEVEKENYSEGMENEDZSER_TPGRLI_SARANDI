@@ -11,12 +11,13 @@ export async function createSchedule(activityDto) {
         });
 
         if (response.ok) {
-            return await response.json();
+            return { success: true, message: await response.json() };
         } else {
-            throw new Error('Failed to create schedule');
+            const errorText = await response.text();
+            throw new Error(errorText);
         }
     } catch (error) {
-        console.error(error);
-        return null;
+        console.error('Error creating schedule:', error.message);
+        return { success: false, message: error.message };
     }
 }
