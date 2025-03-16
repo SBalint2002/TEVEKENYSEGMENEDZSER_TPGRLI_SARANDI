@@ -1,23 +1,44 @@
 import {showToast} from "../utils/uiUtils.js";
-import {getHelloWorld} from "../services/calendarService.js";
-
-let activities = [];
+import {createSchedule} from "../services/calendarService.js";
+import ActivityDto from "../models/activityDto.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    activities = JSON.parse(sessionStorage.getItem('activities')) || [];
+    const activities = JSON.parse(sessionStorage.getItem('activities')) || [];
+    const days = Number(sessionStorage.getItem('days'));
 
-    if (activities.length < 1) {
-        showToast('No activites found', 'bg-danger');
+    if (activities.length < 1 || days < 1 || days > 14) {
+        showToast('Error in creating table (missing information)', 'bg-danger');
         setTimeout(() => {
             window.open('../index.html', '_self');
         }, 3000);
         return;
     }
 
-    showToast('Calendar page loaded', 'bg-success');
+    const schedule = await handleCreateSchedule(activities, days);
+
+    console.log(schedule);
 
     await uploadTimeColumn();
+    //showToast('Calendar page loaded', 'bg-success');
 });
+
+async function handleCreateSchedule(activities, days) {
+    try {
+        const activityDto = new ActivityDto(activities, days);
+
+        const schedule = await createSchedule(activityDto);
+
+        if (!schedule) {
+            throw new Error('No schedule returned');
+        }
+        return schedule;
+    } catch (error) {
+        showToast(error.message, 'bg-danger');
+        setTimeout(() => {
+            //window.open('../index.html', '_self');
+        }, 3000);
+    }
+}
 
 function uploadTimeColumn() {
     const tableBody = document.getElementById('table-body');

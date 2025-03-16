@@ -1,3 +1,6 @@
+using BACKEND.Services;
+using System.Text.Json.Serialization;
+
 namespace BACKEND
 {
     public class Program
@@ -6,9 +9,11 @@ namespace BACKEND
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddScoped<ScheduleService>();
+
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAllOrigins", 
+                options.AddPolicy("AllowAllOrigins",
                     policy =>
                     {
                         policy.AllowAnyOrigin()
@@ -16,6 +21,13 @@ namespace BACKEND
                               .AllowAnyHeader();
                     });
             });
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+
 
 
             builder.Services.AddControllers();
@@ -25,8 +37,6 @@ namespace BACKEND
             app.UseCors("AllowAllOrigins");
             app.UseAuthorization();
             app.MapControllers();
-
-            app.MapGet("/", () => "Hello World!");
 
             app.Run();
         }

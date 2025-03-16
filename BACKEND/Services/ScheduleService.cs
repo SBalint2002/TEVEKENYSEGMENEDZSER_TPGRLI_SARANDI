@@ -6,12 +6,12 @@ namespace BACKEND.Services
 {
     public class ScheduleService
     {
-        public List<ScheduleResponseDto> GenerateSchedule(List<ActivityDto> activities)
+        public ScheduleResponseDto GenerateSchedule(ActivityDto activityDto)
         {
-            
+
             //TODO: algoritmus
 
-            return new List<ScheduleResponseDto>();
+            return new ScheduleResponseDto { activities = [new Activity { name = "example", hours = 1, type = ActivityType.Other }], day = 1 };
         }
     }
 }

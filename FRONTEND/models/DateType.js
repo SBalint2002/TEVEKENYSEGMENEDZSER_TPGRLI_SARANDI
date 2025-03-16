@@ -1,4 +1,4 @@
-export const DateType = Object.freeze({
+const DateType = Object.freeze({
     MONDAY: "Monday",
     TUESDAY: "Tuesday",
     WEDNESDAY: "Wednesday",
@@ -7,3 +7,5 @@ export const DateType = Object.freeze({
     SATURDAY: "Saturday",
     SUNDAY: "Sunday"
 })
+
+export default DateType;

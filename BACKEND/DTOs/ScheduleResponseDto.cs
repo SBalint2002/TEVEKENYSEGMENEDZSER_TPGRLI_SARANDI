@@ -5,7 +5,7 @@ namespace BACKEND.DTOs
 {
     public class ScheduleResponseDto
     {
-        public required string Day { get; set; }
-        public required List<ActivityDto> Activities { get; set; }
+        public required int day { get; set; }
+        public required List<Activity> activities { get; set; }
     }
 }

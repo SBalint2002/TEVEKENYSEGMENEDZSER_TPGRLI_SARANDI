@@ -1,9 +1,6 @@
-class ActivityDto {
-    constructor(name, hours, type) {
-        this.name = name;
-        this.hours = hours;
-        this.type = type;
+export default class ActivityDto {
+    constructor(activities, days) {
+        this.activities = activities;
+        this.days = days;
     }
 }
-
-export default ActivityDto;

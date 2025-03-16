@@ -1,4 +1,4 @@
-import ActivityDto from "../models/ActivityDto.js";
+import Activity from "../models/Activity.js";
 import {getColorByType, showToast} from "../utils/uiUtils.js";
 import {isInputValid, clearInputFields, populateDropdown, loadSavedActivities, getDays} from "../utils/generalUtils.js";
 
@@ -22,7 +22,7 @@ function addActivity() {
         return;
     }
 
-    const activity = new ActivityDto(name, hours, typeValue);
+    const activity = new Activity(name, hours, typeValue);
     activities.push(activity);
 
     createTableRow(activity);
@@ -44,7 +44,7 @@ function createTable() {
 
     sessionStorage.setItem('days', days);
     sessionStorage.setItem('activities', JSON.stringify(activities));
-    window.open('pages/calendarPage.html', '_self')
+    window.open('pages/calendarPage.html', '_self');
 }
 
 export function createTableRow(activity) {
