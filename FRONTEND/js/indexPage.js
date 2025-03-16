@@ -4,6 +4,7 @@ import {isInputValid, clearInputFields, populateDropdown, loadSavedActivities, g
 import ActivityDto from "../models/dto/ActivityDto.js";
 import {createSchedule} from "../services/calendarService.js";
 import ScheduleResponseDto from "../models/dto/ScheduleResponseDto.js";
+import {ToastType} from "../models/ToastType.js";
 
 let activities = [];
 
@@ -36,12 +37,12 @@ async function createTable() {
     const days = Number(document.getElementById('activity-days').value);
 
     if (days < 1 || days > 14) {
-        showToast('Days must be between 1 and 14', 'bg-danger');
+        showToast('Days must be between 1 and 14!', 'bg-danger', ToastType.ALERT);
         return;
     }
 
     if (activities.length === 0) {
-        showToast('Add activities first', 'bg-danger');
+        showToast('Add activities first!', 'bg-danger', ToastType.ALERT);
     }
 
     await handleCreateSchedule(activities, days);
@@ -84,9 +85,8 @@ function deleteActivity(activity, row) {
 async function handleCreateSchedule(activities, days) {
     const activityDto = new ActivityDto(activities, days);
     const scheduleResponse  = await createSchedule(activityDto);
-    console.log(scheduleResponse);
     if (!scheduleResponse.success) {
-        showToast(scheduleResponse.message, 'bg-danger');
+        showToast(scheduleResponse.message, 'bg-danger', ToastType.ALERT);
     } else {
         const schedule = scheduleResponse.message
         sessionStorage.setItem('schedule', JSON.stringify(new ScheduleResponseDto(schedule.day, schedule.activities)));

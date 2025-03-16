@@ -50,8 +50,17 @@
     </div>
 
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-        <div id="toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
-            <span class="toast-body"></span>
+        <div id="toast" class="toast hide shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="row">
+                <div class="col-1">
+                    <img id="success-toast-image" src="./assets/img/success.png" class="float-left" alt="Success" style="display: none; max-width: 20px">
+                    <img id="error-toast-image" src="./assets/img/alert.png" class="float-left" alt="Alert" style="display: none; max-width: 20px" >
+                    <img id="crazy-toast-image" src="./assets/img/crazy.png" class="float-left" alt="Crazy" style="display: none; max-width: 20px" >
+                </div>
+                <div class="col-11">
+                    <span class="toast-body text-start"></span>
+                </div>
+            </div>
         </div>
     </div>
 

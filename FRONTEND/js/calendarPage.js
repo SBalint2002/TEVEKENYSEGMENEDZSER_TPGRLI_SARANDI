@@ -1,9 +1,10 @@
 import {getColorByType, showToast, showToastWithRedirect} from "../utils/uiUtils.js";
+import {ToastType} from "../models/ToastType.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     let schedule = JSON.parse(sessionStorage.getItem('schedule'))
     if (!schedule) {
-        await showToastWithRedirect('No schedule found', 'bg-danger', '../index.html');
+        await showToastWithRedirect('No schedule found!', 'bg-danger', '../index.html', ToastType.ALERT);
     }
     generateTable(schedule.day, schedule.activities);
 });
@@ -66,5 +67,5 @@ function generateTable(days, activities) {
         }
     }
 
-    showToast('Calendar page loaded', 'bg-success');
+    showToast('Schedule table successfully generated!', 'bg-success');
 }
