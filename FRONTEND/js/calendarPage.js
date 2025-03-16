@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log(schedule);
 
     await uploadTimeColumn();
-    //showToast('Calendar page loaded', 'bg-success');
+    showToast('Calendar page loaded', 'bg-success');
 });
 
 async function handleCreateSchedule(activities, days) {
@@ -35,7 +35,7 @@ async function handleCreateSchedule(activities, days) {
     } catch (error) {
         showToast(error.message, 'bg-danger');
         setTimeout(() => {
-            //window.open('../index.html', '_self');
+            window.open('../index.html', '_self');
         }, 3000);
     }
 }
