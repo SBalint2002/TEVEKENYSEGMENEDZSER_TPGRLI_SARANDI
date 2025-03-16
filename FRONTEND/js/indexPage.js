@@ -19,12 +19,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 function addActivity() {
     const name = document.getElementById('activity-name').value;
     const hours = Number(document.getElementById('activity-hours').value);
-    const typeSelect = document.getElementById('activity-type');
-    const typeValue = typeSelect.options[typeSelect.selectedIndex].value;
+    const typeValue = document.getElementById('activity-type').value;
 
-    if (!isInputValid(name, hours, typeValue)) {
-        return;
-    }
+    if (!isInputValid(name, hours, typeValue)) return;
 
     const activity = new Activity(name, hours, typeValue);
     activities.push(activity);
@@ -43,6 +40,7 @@ async function createTable() {
 
     if (activities.length === 0) {
         showToast('Add activities first!', 'bg-danger', ToastType.ALERT);
+        return;
     }
 
     await handleCreateSchedule(activities, days);
@@ -50,29 +48,13 @@ async function createTable() {
 
 export function createTableRow(activity) {
     const row = document.createElement('tr');
-    const nameCell = document.createElement('td');
-    const hoursCell = document.createElement('td');
-    const typeCell = document.createElement('td');
-    const actionCell = document.createElement('td');
-    const typeBadge = document.createElement('span');
-    const deleteButton = document.createElement('button');
-
-    nameCell.textContent = activity.name;
-    hoursCell.textContent = activity.hours;
-    typeBadge.textContent = activity.type;
-    let color = getColorByType(activity.type);
-    typeBadge.classList.add('badge', color);
-    typeCell.appendChild(typeBadge);
-
-    deleteButton.classList.add('btn-close');
-    deleteButton.addEventListener('click', () => deleteActivity(activity, row));
-    actionCell.appendChild(deleteButton);
-
-    row.appendChild(nameCell);
-    row.appendChild(hoursCell);
-    row.appendChild(typeCell);
-    row.appendChild(actionCell);
-
+    row.innerHTML = `
+        <td>${activity.name}</td>
+        <td>${activity.hours}</td>
+        <td><span class="badge ${getColorByType(activity.type)}">${activity.type}</span></td>
+        <td><button class="btn-close"></button></td>
+    `;
+    row.querySelector('.btn-close').addEventListener('click', () => deleteActivity(activity, row));
     document.getElementById('activity-rows').appendChild(row);
 }
 

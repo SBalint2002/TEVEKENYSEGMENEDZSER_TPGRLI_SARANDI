@@ -23,7 +23,6 @@ export function isInputValid(name, hours, typeValue) {
         showToast('Invalid type!', 'bg-danger', ToastType.ALERT);
         return false;
     }
-
     return true;
 }
 
@@ -35,7 +34,6 @@ export function clearInputFields() {
 
 export function populateDropdown() {
     const select = document.getElementById("activity-type");
-
     Object.entries(ActivityType).forEach(([_, value]) => {
         const option = document.createElement('option');
         option.value = value;

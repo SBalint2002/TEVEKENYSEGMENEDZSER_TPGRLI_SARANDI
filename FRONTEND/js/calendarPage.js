@@ -2,7 +2,7 @@ import {getColorByType, showToast, showToastWithRedirect} from "../utils/uiUtils
 import {ToastType} from "../models/ToastType.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    let schedule = JSON.parse(sessionStorage.getItem('schedule'))
+    const schedule = JSON.parse(sessionStorage.getItem('schedule'))
     if (!schedule) {
         await showToastWithRedirect('No schedule found!', 'bg-danger', '../index.html', ToastType.ALERT);
     }
@@ -12,13 +12,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 function uploadTimeColumn(tableBody) {
     for (let hour = 0; hour < 24; hour++) {
         let row = document.createElement('tr');
-
         let timeCell = document.createElement('td');
         timeCell.textContent = `${hour}:00`;
         timeCell.classList.add('time-column', 'text-center', 'fw-bold');
         timeCell.style.width = '50px';
         row.appendChild(timeCell);
-
         tableBody.appendChild(row);
     }
 }
@@ -48,22 +46,18 @@ function generateTable(days, activities) {
     for (let i = 1; i <= days; i++) {
         for (let hour = 0; hour < 24; hour++) {
             const row = tableBody.rows[hour];
-
             const activity = activities.find(a => a.day === i && a.startTime === hour);
+            const cell = document.createElement('td');
             if (activity) {
-                const cell = document.createElement('td');
                 const activityLength = activity.endTime - activity.startTime;
                 cell.textContent = activity.name;
                 cell.rowSpan = activityLength;
-                const bgColor = getColorByType(activity.type);
-                cell.classList.add('col', bgColor, 'text-light', 'fw-bold');
-                row.appendChild(cell);
+                cell.classList.add('col', getColorByType(activity.type), 'text-light', 'fw-bold');
                 hour += activityLength - 1;
             } else {
-                const cell = document.createElement('td');
                 cell.classList.add('col');
-                row.appendChild(cell);
             }
+            row.appendChild(cell);
         }
     }
 
