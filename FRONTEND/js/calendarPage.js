@@ -24,7 +24,7 @@ function uploadTimeColumn(tableBody) {
 function uploadHeaderRow(tableHeader, days) {
     const th = document.createElement('th');
     tableHeader.appendChild(th);
-    for (let i = 0; i < days; i ++) {
+    for (let i = 0; i < days; i++) {
         const th = document.createElement('th');
         th.textContent = `Day ${i + 1}`;
         tableHeader.appendChild(th);
@@ -49,17 +49,27 @@ function generateTable(days, activities) {
             const activity = activities.find(a => a.day === i && a.startTime === hour);
             const cell = document.createElement('td');
             if (activity) {
+                const color = getColorByType(activity.type);
+
+                cell.style.padding = "0";
+                cell.style.position = "relative";
+
+                cell.innerHTML = `
+                    <div class="d-flex flex-column align-items-center ${color} text-light fw-bold calendar-item rounded-3"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                        <span>${activity.name}</span>
+                        <span class="badge ${color}">${activity.type}</span>
+                    </div>
+                `;
+
                 const activityLength = activity.endTime - activity.startTime;
-                cell.textContent = activity.name;
                 cell.rowSpan = activityLength;
-                cell.classList.add('col', getColorByType(activity.type), 'text-light', 'fw-bold');
                 hour += activityLength - 1;
-            } else {
-                cell.classList.add('col');
             }
+            cell.classList.add('col');
             row.appendChild(cell);
         }
     }
 
-    showToast('Schedule table successfully generated!', 'bg-success');
+    showToast('Schedule table successfully generated!', 'bg-success', ToastType.SUCCESS);
 }

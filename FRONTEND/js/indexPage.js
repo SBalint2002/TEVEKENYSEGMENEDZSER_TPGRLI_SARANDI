@@ -43,6 +43,8 @@ async function createTable() {
         return;
     }
 
+    sessionStorage.setItem('days', days);
+    sessionStorage.setItem('activities', JSON.stringify(activities));
     await handleCreateSchedule(activities, days);
 }
 
