@@ -1,6 +1,9 @@
 import Activity from "../models/Activity.js";
 import {getColorByType, showToast} from "../utils/uiUtils.js";
 import {isInputValid, clearInputFields, populateDropdown, loadSavedActivities, getDays} from "../utils/generalUtils.js";
+import ActivityDto from "../models/dto/ActivityDto.js";
+import {createSchedule} from "../services/calendarService.js";
+import ScheduleResponseDto from "../models/dto/ScheduleResponseDto.js";
 
 let activities = [];
 
@@ -9,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     activities = await loadSavedActivities(createTableRow);
     document.getElementById('activity-days').value = getDays() || 1;
     document.getElementById('add-btn').addEventListener('click', addActivity);
-    document.getElementById('create-table').addEventListener('click', createTable);
+    document.getElementById('create-table').addEventListener('click', await createTable);
 });
 
 function addActivity() {
@@ -29,7 +32,7 @@ function addActivity() {
     clearInputFields();
 }
 
-function createTable() {
+async function createTable() {
     const days = Number(document.getElementById('activity-days').value);
 
     if (days < 1 || days > 14) {
@@ -39,12 +42,9 @@ function createTable() {
 
     if (activities.length === 0) {
         showToast('Add activities first', 'bg-danger');
-        return;
     }
 
-    sessionStorage.setItem('days', days);
-    sessionStorage.setItem('activities', JSON.stringify(activities));
-    window.open('pages/calendarPage.html', '_self');
+    await handleCreateSchedule(activities, days);
 }
 
 export function createTableRow(activity) {
@@ -79,4 +79,17 @@ function deleteActivity(activity, row) {
     activities = activities.filter(a => a !== activity);
     sessionStorage.setItem('activities', JSON.stringify(activities));
     row.remove();
+}
+
+async function handleCreateSchedule(activities, days) {
+    const activityDto = new ActivityDto(activities, days);
+    const scheduleResponse  = await createSchedule(activityDto);
+    console.log(scheduleResponse);
+    if (!scheduleResponse.success) {
+        showToast(scheduleResponse.message, 'bg-danger');
+    } else {
+        const schedule = scheduleResponse.message
+        sessionStorage.setItem('schedule', JSON.stringify(new ScheduleResponseDto(schedule.day, schedule.activities)));
+        window.open('pages/calendarPage.html', '_self');
+    }
 }

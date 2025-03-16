@@ -8,7 +8,12 @@ export function isInputValid(name, hours, typeValue) {
         return false;
     }
 
-    if (hours < 1 || hours > 24) {
+    if (hours > 16) {
+        showToast('Broo... You need to rest sometimes', 'bg-danger');
+        return false;
+    }
+
+    if (hours < 1) {
         showToast('Hours must be between 1 and 24', 'bg-danger');
         return false;
     }
