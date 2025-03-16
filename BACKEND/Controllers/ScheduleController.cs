@@ -28,7 +28,7 @@ namespace BACKEND.Controllers
 
                 var schedule = scheduleService.GenerateSchedule(activityDto);
                 return Ok(schedule);
-            }
+            }   
             catch (InvalidDataException ex)
             {
                 return BadRequest(ex.Message);
