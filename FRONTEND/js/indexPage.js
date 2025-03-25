@@ -21,7 +21,7 @@ function addActivity() {
     const hours = Number(document.getElementById('activity-hours').value);
     const typeValue = document.getElementById('activity-type').value;
 
-    if (!isInputValid(name, hours, typeValue)) return;
+    if (!isInputValid()) return;
 
     const activity = new Activity(name, hours, typeValue);
     activities.push(activity);
@@ -34,7 +34,7 @@ async function createTable() {
     const days = Number(document.getElementById('activity-days').value);
 
     if (days < 1 || days > 14) {
-        showToast('Days must be between 1 and 14!', 'bg-danger', ToastType.ALERT);
+        showToast('Days must be between 1 and 14', 'bg-danger', ToastType.ALERT);
         return;
     }
 
@@ -69,7 +69,12 @@ function deleteActivity(activity, row) {
 async function handleCreateSchedule(activities, days) {
     const activityDto = new ActivityDto(activities, days);
     const scheduleResponse  = await createSchedule(activityDto);
+    const daysInput = document.getElementById('activity-days');
+    daysInput.style.border = '1px solid #ced4da';
     if (!scheduleResponse.success) {
+        if (scheduleResponse.message.includes("days")) {
+            daysInput.style.border = '1px solid red';
+        }
         showToast(scheduleResponse.message, 'bg-danger', ToastType.ALERT);
     } else {
         const schedule = scheduleResponse.message
